@@ -1,8 +1,8 @@
-var merkleStream = require('merkle-tree-stream')
+var MerkleStream = require('@tradle/merkle-tree-stream')
 var merkleProofs = require('./')
 var crypto = require('crypto')
 
-var stream = merkleStream({
+var stream = new MerkleStream({
   leaf: hashLeaf,
   parent: hashParents
 })

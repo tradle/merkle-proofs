@@ -1,7 +1,7 @@
 
 var crypto = require('crypto')
 var tape = require('tape')
-var merkleStream = require('merkle-tree-stream')
+var MerkleStream = require('@tradle/merkle-tree-stream')
 var shmerkle = require('./')
 var proofStream = shmerkle.proofStream
 var proofGenerator = shmerkle.proofGenerator
@@ -114,7 +114,7 @@ function useGenerator (nodes, indicesToProve, cb) {
 }
 
 function createTree (arr, cb) {
-  var stream = merkleStream(MERKLE_OPTS)
+  var stream = new MerkleStream(MERKLE_OPTS)
 
   var nodes = []
   stream.on('data', function (node) {
@@ -125,7 +125,7 @@ function createTree (arr, cb) {
     stream.write(data)
   })
 
-  stream.finalize()
+  stream.write(MerkleStream.CLOSE_UP)
   stream.end()
   stream.on('end', function () {
     cb(null, nodes)
