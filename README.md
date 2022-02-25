@@ -11,7 +11,7 @@ npm install @tradle/merkle-proofs
 ``` js
 const crypto = require('crypto')
 const MerkleStream = require('@tradle/merkle-tree-stream')
-const { MerkleProofGenerator, createVerifier } = require('merkle-proofs')
+const { MerkleProofGenerator, createVerifier } = require('@tradle/merkle-proofs')
 
 const stream = new MerkleStream({
   leaf: hashLeaf,

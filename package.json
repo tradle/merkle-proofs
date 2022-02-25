@@ -1,6 +1,6 @@
 {
-  "name": "merkle-proofs",
-  "version": "1.0.3",
+  "name": "@tradle/merkle-proofs",
+  "version": "2.0.0",
   "description": "generate and verify merkle proofs",
   "main": "./cjs/index.js",
   "types": "./cjs/index.d.ts",
@@ -41,5 +41,20 @@
     "c8": "^7.11.0",
     "tape": "^5.5.2",
     "typescript": "^4.5.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tradle/merkle-proofs.git"
+  },
+  "keywords": [
+    "merkle-tree",
+    "verify",
+    "validate",
+    "streamed",
+    "proofs"
+  ],
+  "bugs": {
+    "url": "https://github.com/tradle/merkle-proofs/issues"
+  },
+  "homepage": "https://github.com/tradle/merkle-proofs#readme"
 }
