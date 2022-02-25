@@ -1,0 +1,5 @@
+tsconfig.json
+test
+coverage
+*.tgz
+.github

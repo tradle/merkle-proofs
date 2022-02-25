@@ -2,21 +2,44 @@
   "name": "merkle-proofs",
   "version": "1.0.3",
   "description": "generate and verify merkle proofs",
-  "main": "index.js",
+  "main": "./cjs/index.js",
+  "types": "./cjs/index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./cjs/index.d.ts",
+      "require": "./cjs/index.js"
+    },
+    "./generator": {
+      "types": "./cjs/generator.d.ts",
+      "require": "./cjs/generator.js"
+    },
+    "./proof-stream": {
+      "types": "./cjs/proof-stream.d.ts",
+      "require": "./cjs/proof-stream.js"
+    },
+    "./verifier": {
+      "types": "./cjs/verifier.d.ts",
+      "require": "./cjs/verifier.js"
+    }
+  },
   "scripts": {
+    "build": "tsc",
     "test": "npm run unit",
     "coverage": "c8 npm run unit",
-    "unit": "node test"
+    "unit": "npx tsc && node test"
   },
   "author": "Mark Vayngrib <mark@tradle.io> (http://github.com/mvayngrib)",
   "license": "MIT",
   "dependencies": {
+    "@types/streamx": "^2.9.1",
     "flat-tree": "^1.4.0",
-    "readable-stream": "^2.1.0"
+    "streamx": "^2.12.2"
   },
   "devDependencies": {
     "@tradle/merkle-tree-stream": "^4.1.1",
     "c8": "^7.11.0",
-    "tape": "^5.5.2"
+    "tape": "^5.5.2",
+    "typescript": "^4.5.5"
   }
 }

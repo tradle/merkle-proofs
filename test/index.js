@@ -2,10 +2,10 @@
 var crypto = require('crypto')
 var tape = require('tape')
 var MerkleStream = require('@tradle/merkle-tree-stream')
-var shmerkle = require('./')
-var MerkleProofStream = shmerkle.proofStream
-var MerkleProofGenerator = shmerkle.proofGenerator
-var verifier = shmerkle.verifier
+var shmerkle = require('../cjs')
+var MerkleProofStream = shmerkle.MerkleProofStream
+var MerkleProofGenerator = shmerkle.MerkleProofGenerator
+var verifier = shmerkle.createVerifier
 var MERKLE_OPTS = {
   leaf: function (leaf) {
     return hash([leaf.data])
@@ -47,7 +47,7 @@ function proveVerify (opts) {
 
     // make sure stream and generator get same results
     ;[useStream, useGenerator].forEach(function (prove, i) {
-      tape('prove, verify test ' + i, function (t) {
+      tape(`prove, verify test #${i} (${prove.name})`, function (t) {
         prove(nodes, indicesToProve, function (err, proof) {
           if (err) throw err
 
@@ -92,8 +92,7 @@ function useStream (nodes, indicesToProve, cb) {
   pstream.on('data', function (node) {
     proof.push(node)
   })
-
-  pstream.on('end', function () {
+  pstream.on('close', function () {
     cb(null, proof)
   })
 

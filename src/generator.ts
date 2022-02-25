@@ -1,25 +1,33 @@
+const flat = require('flat-tree')
 
-var flat = require('flat-tree')
+export interface MiniNode <Hash> {
+  index: number,
+  hash: Hash
+}
 
-module.exports = class MerkleProofGenerator {
-  constructor (nodes) {
+export class MerkleProofGenerator <Hash, Node extends MiniNode<Hash>> {
+  _indicesInProof: { [key: string]: any } = {}
+  _rootIdx: number
+  _nodes: Node[]
+  _proof: MiniNode<Hash>[]
+  _root: Node
 
+  constructor (nodes: Node[]) {
     this._indicesInProof = {}
     this._nodes = new Array(nodes.length)
 
     // order tree
-    for (var i = 0; i < nodes.length; i++) {
-      var idx = nodes[i].index
-      this._nodes[idx] = nodes[i]
+    for (const node of nodes) {
+      this._nodes[node.index] = node
     }
 
-    var height = nearestPowerOf2(nodes.length)
+    const height = nearestPowerOf2(nodes.length)
     this._rootIdx = Math.pow(2, height - 1) - 1
     this._root = this._nodes[this._rootIdx]
     this._proof = []
   }
 
-  add (idx) {
+  add (idx: number | Node): MiniNode<Hash>[] {
     // accept node or index as parameter
     if (typeof idx !== 'number') {
       if (this._nodes.indexOf(idx) === -1) throw new Error('expected index or node')
@@ -27,15 +35,13 @@ module.exports = class MerkleProofGenerator {
       idx = idx.index
     }
 
-    var added = []
-    var path = getPath(idx, this._nodes, this._rootIdx)
-    for (var i = 0; i < path.length; i++) {
-      var nodeIdx = path[i]
+    const added: MiniNode<Hash>[] = []
+    const path = getPath(idx, this._nodes, this._rootIdx)
+    for (const nodeIdx of path) {
       if (nodeIdx in this._indicesInProof) continue
 
       this._indicesInProof[nodeIdx] = true
-      var node = this._nodes[nodeIdx]
-      node = minify(node)
+      const node = minify(this._nodes[nodeIdx])
       added.push(node)
       this._proof.push(node)
     }
@@ -43,15 +49,15 @@ module.exports = class MerkleProofGenerator {
     return added
   }
 
-  proof () {
+  proof (): MiniNode<Hash>[] {
     var proof = this._proof.slice()
     proof.push(minify(this._root))
     return proof
   }
 }
 
-function getPath (leafIdx, nodeByIdx, rootIdx) {
-  var path = []
+function getPath <Hash>(leafIdx: number, nodeByIdx: MiniNode<Hash>[], rootIdx: number): number[] {
+  const path: number[] = []
   while (leafIdx !== rootIdx) {
     var sib = flat.sibling(leafIdx)
     path.push(sib in nodeByIdx ? sib : leafIdx)
@@ -61,11 +67,11 @@ function getPath (leafIdx, nodeByIdx, rootIdx) {
   return path
 }
 
-function nearestPowerOf2 (n) {
+function nearestPowerOf2 (n: number): number {
   return Math.ceil(Math.log(n) / Math.log(2))
 }
 
-function minify (node) {
+function minify <Hash> (node: MiniNode<Hash>): MiniNode<Hash> {
   return {
     index: node.index,
     hash: node.hash

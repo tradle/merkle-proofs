@@ -1,8 +1,8 @@
-var MerkleStream = require('@tradle/merkle-tree-stream')
-var merkleProofs = require('./')
-var crypto = require('crypto')
+const crypto = require('crypto')
+const MerkleStream = require('@tradle/merkle-tree-stream')
+const { MerkleProofGenerator, createVerifier } = require('./')
 
-var stream = new MerkleStream({
+const stream = new MerkleStream({
   leaf: hashLeaf,
   parent: hashParents
 })
@@ -12,7 +12,7 @@ stream.write('hashed')
 stream.write('world')
 stream.end()
 
-var nodes = []
+const nodes = []
 stream.on('data', function (data) {
   nodes.push(data)
 })
@@ -20,16 +20,14 @@ stream.on('data', function (data) {
 stream.on('end', function () {
   // indices are based on merkle-tree-stream's use of flat-tree, so to find the index of hello
   // find the node in `proof` or `nodes` with node.data === new Buffer('hello')
-  nodes.sort(function (a, b) {
-    return a.index - b.index
-  })
+  nodes.sort((a, b) => a.index - b.index)
 
-  var prover = merkleProofs.proofGenerator(nodes)
+  const prover = new MerkleProofGenerator(nodes)
   prover.add(nodes[0]) // 'hello'
   prover.add(nodes[2]) // 'world'
-  var proof = prover.proof() // proof path nodes, plus merkle root
+  const proof = prover.proof() // proof path nodes, plus merkle root
 
-  var verify = merkleProofs.verifier({
+  const verify = createVerifier({
     proof: proof,
     leaf: hashLeaf,
     parent: hashParents
