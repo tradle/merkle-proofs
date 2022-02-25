@@ -1,3 +1,4 @@
+var { Buffer } = require('buffer')
 var flat = require('flat-tree')
 
 module.exports = merkleProofVerifier
@@ -65,5 +66,5 @@ function equals (a, b) {
 }
 
 function toBuffer (data) {
-  return Buffer.isBuffer(data) ? data : new Buffer(data)
+  return Buffer.isBuffer(data) ? data : Buffer.from(data)
 }
