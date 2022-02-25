@@ -3,8 +3,8 @@ var crypto = require('crypto')
 var tape = require('tape')
 var MerkleStream = require('@tradle/merkle-tree-stream')
 var shmerkle = require('./')
-var proofStream = shmerkle.proofStream
-var proofGenerator = shmerkle.proofGenerator
+var MerkleProofStream = shmerkle.proofStream
+var MerkleProofGenerator = shmerkle.proofGenerator
 var verifier = shmerkle.verifier
 var MERKLE_OPTS = {
   leaf: function (leaf) {
@@ -87,7 +87,7 @@ function getIndices (nodes) {
 }
 
 function useStream (nodes, indicesToProve, cb) {
-  var pstream = proofStream({ nodes: nodes })
+  var pstream = new MerkleProofStream({ nodes: nodes })
   var proof = []
   pstream.on('data', function (node) {
     proof.push(node)
@@ -105,7 +105,7 @@ function useStream (nodes, indicesToProve, cb) {
 }
 
 function useGenerator (nodes, indicesToProve, cb) {
-  var gen = proofGenerator(nodes)
+  var gen = new MerkleProofGenerator(nodes)
   indicesToProve.forEach(function (node) {
     gen.add(node)
   })
