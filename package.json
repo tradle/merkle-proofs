@@ -4,7 +4,9 @@
   "description": "generate and verify merkle proofs",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "npm run unit",
+    "coverage": "c8 npm run unit",
+    "unit": "node test"
   },
   "author": "Mark Vayngrib <mark@tradle.io> (http://github.com/mvayngrib)",
   "license": "MIT",
@@ -14,6 +16,7 @@
   },
   "devDependencies": {
     "@tradle/merkle-tree-stream": "^4.1.1",
+    "c8": "^7.11.0",
     "tape": "^5.5.2"
   }
 }
