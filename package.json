@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "flat-tree": "^1.4.0",
-    "merkle-tree-stream": "mvayngrib/merkle-tree-stream#finalize",
+    "merkle-tree-stream": "https://github.com/mvayngrib/merkle-tree-stream/archive/ef1abd6b566a410f8cdc7190f0966b97f403e290.tar.gz",
     "readable-stream": "^2.1.0"
   },
   "devDependencies": {
